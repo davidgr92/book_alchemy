@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="text-center">Add Author Form</h2>
+            <form action="/add_author" method="POST" class="mb-4">
+                <div class="form-group">
+                    <label for="name">Author Name:</label>
+                    <input type="text" id="name" name="name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="birthdate">Birthdate:</label>
+                    <input type="date" id="birthdate" name="birthdate" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="date_of_death">Date of Death:</label>
+                    <input type="date" id="date_of_death" name="date_of_death" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Add Author</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

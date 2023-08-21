@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <h2 class="text-center">All Authors</h2>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Date of Birth</th>
+                        <th>Date of Death</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for author in authors %}
+                        <tr>
+                            <td>
+                                <a href="{{ url_for('main.show_single_author', author_id=author.id) }}">
+                                {{ author.name }}</a>
+                            </td>
+                            <td>{{ author.birth_date or 'Unknown' }}</td>
+                            <td>{{ author.date_of_death or 'Still Alive or Unknown' }}</td>
+                            <td>
+                                <form action="/author/{{ author.id }}/delete" method="POST">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

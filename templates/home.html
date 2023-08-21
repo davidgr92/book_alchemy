@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <form action="/" method="POST" class="mb-4">
+                <h2>Sort by:</h2>
+                <div class="form-group">
+                    <label for="order_column">Ordering Column:</label>
+                    <select name="order_column" id="order_column" class="form-control" required>
+                        <option value="title">Book Title</option>
+                        <option value="name">Author Name</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="direction">Direction:</label>
+                    <select name="direction" id="direction" class="form-control" required>
+                        <option value="true">Ascending</option>
+                        <option value="">Descending</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Sort Books</button>
+            </form>
+        </div>
+
+        <div class="col-md-6">
+            <form action="/search_results" method="POST">
+                <h2>Search:</h2>
+                <div class="form-group">
+                    <label for="search_column">Column to search:</label>
+                    <select name="search_column" id="search_column" class="form-control" required>
+                        <option value="title">Book Title</option>
+                        <option value="name">Author Name</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="search_query">Search Book Title:</label>
+                    <input type="text" id="search_query" name="search_query" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+    </div>
+    <h2 class="text-center mt-3">Books in Library:</h2>
+
+    {% if not books %}
+        <h2 class="mt-4">No results found</h2>
+    {% else %}
+        <div class="d-flex flex-wrap justify-content-center">
+            {% for book, author in books %}
+            <div class="p-3 book-container text-center">
+                <div class="d-flex flex-column align-items-center">
+                    <a href="{{ url_for('main.show_single_book', book_id=book.id) }}">
+                        <h3 class="text-center mb-2 book-heading">{{ book.title }}</h3>
+                    </a>
+                    <a href="{{ url_for('main.show_single_author', author_id=author.id) }}">
+                        <h4 class="text-center mb-2 author-heading">by {{ author.name }}</h4>
+                    </a>
+                    <img class="mb-2 book-cover" src="{{ book.cover_url }}" alt="Book Cover">
+
+                    <form action="/book/{{ book.id }}/delete" method="POST">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete Book</button>
+                    </form>
+                    <form action="/author/{{ author.id }}/delete" method="POST">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete Author</button>
+                    </form>
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}
