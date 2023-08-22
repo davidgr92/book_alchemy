@@ -144,3 +144,15 @@ def delete_author(author_id):
         flash("Successfully deleted the author.")
         return redirect(url_for('main.home'))
     return redirect(url_for('main.home'))
+
+
+@main.app_errorhandler(404)
+def page_not_found(err):
+    """Handle error 404"""
+    return render_template('404.html'), 404
+
+
+@main.app_errorhandler(500)
+def handle_500(err):
+    """Handle error 500"""
+    return render_template('500.html'), 500
