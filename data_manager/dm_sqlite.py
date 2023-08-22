@@ -1,5 +1,5 @@
-from flask import flash
 from datetime import datetime
+from flask import flash
 from book_alchemy.my_app.data_models import Author, Book
 from book_alchemy.apis.isbndb_api import get_book_cover_by_isbn
 
@@ -43,14 +43,13 @@ class SqliteDataManager:
         """
         if col_str == "title":
             return Book.title
-        elif col_str == "name":
+        if col_str == "name":
             return Author.name
-        elif col_str == "author_id":
+        if col_str == "author_id":
             return Author.id
-        elif col_str == "book_id":
+        if col_str == "book_id":
             return Book.id
-        else:
-            raise ValueError("Invalid col_str value")
+        raise ValueError("Invalid col_str value")
 
     def get_sorting_object(self, sort_column, direction):
         """
@@ -127,8 +126,9 @@ class SqliteDataManager:
         and search query.
         :param filter_column: Based on what column to search the data
         :param search_q: What to search in provided search column
-        :param limit: if defined, limits the reponse
-        :return:
+        :param limit: if defined, limits the response
+        :return: returns an iterable of filtered entries from the database
+        based on the provided filter column and search query.
         """
         query = self.db_session.query
         filter_column = self.get_sort_search_column(filter_column)
@@ -193,9 +193,14 @@ class SqliteDataManager:
         return f"Successfully added {new_book}"
 
     def delete_entry_from_db(self, item_id, db_model=Book):
+        """
+        Deletes an entry from the database
+        :param item_id: entry id either from authors or books tables
+        :param db_model: database table from which to delete the entry
+        """
         if db_model == Author:
             books_by_author = self.get_filtered_data_from_db("author_id", item_id)
-            for book, author in books_by_author:
+            for book, _ in books_by_author:
                 self.delete_entry_from_db(book.id)
             self.db_session.query(db_model).filter(db_model.id == item_id).delete()
         else:

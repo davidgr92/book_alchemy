@@ -7,6 +7,10 @@ db = SQLAlchemy()
 
 
 def create_app():
+    """
+    Create and initiate Flask application and setup basic configuration
+    :return: Returns the app object
+    """
     app = Flask(__name__,
                 static_folder=get_folder_path_in_root_by_name("static"),
                 template_folder=get_folder_path_in_root_by_name("templates"))
@@ -16,6 +20,7 @@ def create_app():
 
     db.init_app(app)
 
+    # Import is here because otherwise it causes circular import
     from my_app import main_routes as main_bp
     app.register_blueprint(main_bp.main)
 
